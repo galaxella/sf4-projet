@@ -42,6 +42,9 @@
                                 <span class="icon"><i class="fas fa-user-circle"></i></span>
                                 <strong>{{ app.user.lastname }} {{ app.user.name }}</strong>
                             </a>
+                            <a class="button is-light is-small" href="{{ path('profil_update') }}">
+                                Modifier mon profil
+                            </a>
                             <a class="button is-light is-small" href="{{ path('app_logout') }}">
                                 Déconnexion
                             </a>

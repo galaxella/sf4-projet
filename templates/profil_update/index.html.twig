@@ -1,0 +1,18 @@
+{% extends '_template.html.twig' %}
+
+{% block title %}Kikiriki - Modification profil{% endblock %}
+
+{% block content %}
+    <div class="section">
+
+        <h1 class="title">Modification de votre profil</h1>
+
+        {{ form_start(profilUpdateForm) }}
+        {{ form_row(profilUpdateForm.name, { label: 'Nom'}) }}
+        {{ form_row(profilUpdateForm.lastname, { label: 'Prénom'}) }}
+        {{ form_row(profilUpdateForm.email, { label: 'Adresse mail'}) }}
+
+        <button type="submit" class="btn">Mettre à jour</button>
+        {{ form_end(profilUpdateForm) }}
+    </div>
+{% endblock %}
