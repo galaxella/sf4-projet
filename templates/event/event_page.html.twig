@@ -1,0 +1,22 @@
+{% extends '_template.html.twig' %}
+
+{% block title %}Evénement{% endblock %}
+
+{% block content %}
+<h1 class="title"> {{ evenement.name }}</h1><br>
+    <p>On vous attend nombreux à : {{ evenement.place }}</p><br>
+    <p>Crée par : {{ evenement.author.name }}</p> {#  name de user qui a une relation avec author #}
+    <p>Le {{ evenement.date|date('d/m/Y') }}</p><br>  {#  donner un format d'affichage à date #}
+    <p>{{ evenement.description }}</p><br>
+
+    <p>Participants :
+        {% for user in evenement.participant %}
+            {{ user.name }}
+        {% endfor %}
+    </p>
+
+
+
+
+
+{% endblock %}
