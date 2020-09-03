@@ -22,11 +22,21 @@ class EventController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/my_event_created", name="my_event_created")
+     */
+    public function myEventsCreated(EventRepository $repository)
+    {
+        return $this->render('event/event_list.html.twig', [
+            'event_list' => $repository->findBy(['author' => $this->getUser()]),
+        ]);
+    }
+    
 
     /**
      * @Route("/event/create", name="event_create")
      */
-    public function EventCreate(Request $request)
+    public function eventCreate(Request $request)
     {
         $form = $this->createForm(CreateEventFormType::class);
         $form->handleRequest($request);
@@ -56,7 +66,7 @@ class EventController extends AbstractController
      * Page d'un événement
      * @Route ("/event/{id}", name="event_page")
      */
-    public function EventPage(Event $my_event) // 1 instance de la classe Event
+    public function eventPage(Event $my_event) // 1 instance de la classe Event
     {
         return $this->render('event/event_page.html.twig', [
             'evenement' => $my_event

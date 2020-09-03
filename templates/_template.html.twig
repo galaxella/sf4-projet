@@ -32,6 +32,24 @@
                 <a class="navbar-item" href="{{ path('event_create') }}">
                     Créer un événement
                 </a>
+
+                <nav class="navbar has-background-grey-darker is-dark" role="navigation" aria-label="dropdown navigation">
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            Mes événements
+                        </a>
+
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item" href="{{ path('my_event_created') }}">
+                                que j'ai créés
+                            </a>
+                            <a class="navbar-item">
+                                auxquels je participe
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
             </div>
 
             <div class="navbar-end">
@@ -63,6 +81,7 @@
                     </div>
                 </div>
 
+                {#
                 <a class="navbar-item">
                     <form action="#">
                         <div class="field has-addons">
@@ -78,6 +97,7 @@
                         </div>
                     </form>
                 </a>
+                #}
             </div>
         </div>
     </nav>
