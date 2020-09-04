@@ -29,6 +29,7 @@
                     Tous les événements
                 </a>
 
+                {% if app.user %}
                 <a class="navbar-item" href="{{ path('event_create') }}">
                     Créer un événement
                 </a>
@@ -49,6 +50,7 @@
                         </div>
                     </div>
                 </nav>
+                {% endif %}
 
             </div>
 
