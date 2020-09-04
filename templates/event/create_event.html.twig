@@ -1,0 +1,25 @@
+{% extends '_template.html.twig' %}
+
+{% block title %}Création - events {% endblock %}
+
+
+
+{% block content %}
+    <div class="section">
+        <h1 class="title">Créer un événement</h1>
+
+
+        {{ form_start(eventCreateForm) }}
+
+        {{ form_row(eventCreateForm.name, {label: "Titre de l'événement:"}) }}
+        {{ form_row(eventCreateForm.description, {label: "Description:"}) }}
+        {{ form_row(eventCreateForm.place, {label: "Lieu:"}) }}
+        {{ form_row(eventCreateForm.date, {label: "Date:"}) }}
+
+        <button type="submit" class="btn">
+            Créer l'événement
+        </button>
+        {{ form_end(eventCreateForm) }}
+
+    </div>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +47,22 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $lastname;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="author")
+     */
+    private $events;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="participant")
+     */
+    private $events_participant;
+
+    public function __construct()
+    {
+        $this->events = new ArrayCollection();
+        $this->events_participant = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -144,6 +162,65 @@ class User implements UserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
+            // set the owning side to null (unless already changed)
+            if ($event->getAuthor() === $this) {
+                $event->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEventsParticipant(): Collection
+    {
+        return $this->events_participant;
+    }
+
+    public function addEventsParticipant(Event $eventsParticipant): self
+    {
+        if (!$this->events_participant->contains($eventsParticipant)) {
+            $this->events_participant[] = $eventsParticipant;
+            $eventsParticipant->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventsParticipant(Event $eventsParticipant): self
+    {
+        if ($this->events_participant->contains($eventsParticipant)) {
+            $this->events_participant->removeElement($eventsParticipant);
+            $eventsParticipant->removeParticipant($this);
+        }
 
         return $this;
     }

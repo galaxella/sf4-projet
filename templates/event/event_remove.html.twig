@@ -1,0 +1,18 @@
+{% extends '_template.html.twig' %}
+
+{% block title %}Kikiriki - Delete event{% endblock %}
+
+{% block content %}
+    <div class="section">
+
+        <h1 class="title">Effacer l'événement {{ event.name }}</h1>
+
+        {{ form_start(eventRemoveForm) }}
+        {{ form_row(eventRemoveForm.confirmation, {
+            label: 'Je confirme la suppression définitive de l\'événement "' ~ event.name ~ '" prévu le ' ~ event.date|date('d/m/Y')
+        }) }}
+
+        <button type="submit" class="btn">Effacer</button>
+        {{ form_end(eventRemoveForm) }}
+    </div>
+{% endblock %}
