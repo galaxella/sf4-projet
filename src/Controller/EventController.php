@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Event;
+use App\Entity\User;
 use App\Form\CreateEventFormType;
 use App\Form\EventRemoveFormType;
 use App\Form\EventUpdateFormType;
@@ -32,6 +33,16 @@ class EventController extends AbstractController
     {
         return $this->render('event/event_list.html.twig', [
             'event_list' => $repository->findBy(['author' => $this->getUser()]),
+        ]);
+    }
+
+    /**
+     * @Route("/my_event_participant", name="my_event_participant")
+     */
+    public function myEventsParticipant(EventRepository $repository)
+    {
+        return $this->render('event/event_list.html.twig', [
+            'event_list' => $this->getUser()->getEventsParticipant(),
         ]);
     }
 
@@ -128,6 +139,27 @@ class EventController extends AbstractController
             'event' => $event
         ]);
 
+    }
+    /**
+     * Mise à jour de la participation d'un utilisateur à un événement
+     * @Route("/event/{id<\d+>}/toggle_participant", name="toggle_participant")
+     */
+    public function event_toggleParticipant(Event $event)
+    {
+        $user = $this->getUser();
+        // si mon nom est dans la liste des participants, je me desinscrit
+        if ($event->getParticipant()->contains($user)){
+            $event->removeParticipant($user);
+        } else {
+            $event->addParticipant($user);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($event);
+        $entityManager->flush();
+
+        return $this->render('event/event_page.html.twig', [
+            'evenement'=> $event
+        ]);
     }
 
 

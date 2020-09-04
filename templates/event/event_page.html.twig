@@ -3,17 +3,26 @@
 {% block title %}Evénement{% endblock %}
 
 {% block content %}
-<h1 class="title"> {{ evenement.name }}</h1>
+    <h1 class="title"> {{ evenement.name }}</h1>
 
-    {%  if is_granted("EVENT_CHANGE", evenement) %}
-    <a class="button is-small is-danger" href="{{ path('event_page', {id: evenement.id}) }}">Effacer</a>
-    <a class="button is-small is-warning" href="{{ path('my_event_update', {id: evenement.id}) }}">Modifier</a>
+    {% if is_granted("EVENT_CHANGE", evenement) %}
+        <a class="button is-small is-danger" href="{{ path('event_page', {id: evenement.id}) }}">Effacer</a>
+        <a class="button is-small is-warning" href="{{ path('my_event_update', {id: evenement.id}) }}">Modifier</a>
     {% endif %}
     <br>
-    <p>Crée par : {{ evenement.author.name }}</p> {#  name de user qui a une relation avec author #}
-    <p>Le {{ evenement.date|date('d/m/Y') }}</p><br>  {#  donner un format d'affichage à date #}
+    <p>Crée par : {{ evenement.author.name }}</p> {# name de user qui a une relation avec author #}
+    <p>Le {{ evenement.date|date('d/m/Y') }}</p><br>  {# donner un format d'affichage à date #}
     <p>On vous attend nombreux à : {{ evenement.place }}</p><br>
     <p>{{ evenement.description }}</p><br>
+
+    {% if app.user %}
+        {% if app.user in evenement.participant %}
+        <a class="button is-small is-danger" href="{{ path('toggle_participant', {id: evenement.id}) }}">Se désinscrire</a>
+        {% else %}
+        <a class="button is-small is-success" href="{{ path('toggle_participant', {id: evenement.id}) }}">Participer</a>
+        {% endif %}
+
+    {% endif %}
 
     <p>Participants :
         {% for user in evenement.participant %}
