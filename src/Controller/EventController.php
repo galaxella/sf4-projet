@@ -31,7 +31,7 @@ class EventController extends AbstractController
             'event_list' => $repository->findBy(['author' => $this->getUser()]),
         ]);
     }
-    
+
 
     /**
      * @Route("/event/create", name="event_create")
@@ -54,7 +54,7 @@ class EventController extends AbstractController
             // do anything else you need here, like send an email
 
             $this->addFlash('success', "Votre événement a été enregistré ! ");
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('my_event_created');
         }
 
         return $this->render('event/create_event.html.twig', [
