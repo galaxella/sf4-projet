@@ -1,0 +1,19 @@
+{% extends '_template.html.twig' %}
+
+{% block title %}Kikiriki - Modification event{% endblock %}
+
+{% block content %}
+    <div class="section">
+
+        <h1 class="title">Modification de l'événement</h1>
+
+        {{ form_start(EventUpdateForm) }}
+        {{ form_row(EventUpdateForm.name, { label: 'Titre'}) }}
+        {{ form_row(EventUpdateForm.description, { label: 'Déscription'}) }}
+        {{ form_row(EventUpdateForm.place, { label: 'Lieu'}) }}
+        {{ form_row(EventUpdateForm.date, { label: 'Date'}) }}
+
+        <button type="submit" class="btn">Mettre à jour</button>
+        {{ form_end(EventUpdateForm) }}
+    </div>
+{% endblock %}

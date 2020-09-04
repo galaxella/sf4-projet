@@ -26,8 +26,8 @@
             <td>
                 <a class="button is-small is-success" href="{{ path('event_page', {id: event.id}) }}">Voir</a><br>
                 {%  if is_granted("EVENT_CHANGE", event) %}
-                <a class="button is-small is-danger" href="{{ path('event_page', {id: event.id}) }}">Effacer</a><br>
-                <a class="button is-small is-warning" href="{{ path('event_page', {id: event.id}) }}">Modifier</a>
+                <a class="button is-small is-danger" href="{{ path('event_remove', {id: event.id}) }}">Effacer</a><br>
+                <a class="button is-small is-warning" href="{{ path('my_event_update', {id: event.id}) }}">Modifier</a>
                 {% endif %}
             </td>
         </tr>

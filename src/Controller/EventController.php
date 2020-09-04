@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Event;
 use App\Form\CreateEventFormType;
-use App\Form\ProfilUpdateFormType;
+use App\Form\EventRemoveFormType;
+use App\Form\EventUpdateFormType;
 use App\Repository\EventRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -64,7 +67,7 @@ class EventController extends AbstractController
 
     /**
      * Page d'un événement
-     * @Route ("/event/{id}", name="event_page")
+     * @Route ("/event/{id<\d+>}", name="event_page")
      */
     public function eventPage(Event $my_event) // 1 instance de la classe Event
     {
@@ -72,6 +75,59 @@ class EventController extends AbstractController
             'evenement' => $my_event
 
         ]);
+    }
+
+    /**
+     * Modifier un événement
+     * @Route("/event/{id<\d+>}/update", name="my_event_update")
+     * @IsGranted("EVENT_CHANGE", subject="event")
+     */
+    public function eventUpdate(Request $request, Event $event)
+    {
+        $form = $this->createForm(EventUpdateFormType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $event = $form->getData();           // getData() : mèthode qui retourne les données du formulaire
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($event);
+            $entityManager->flush();
+            // do anything else you need here, like send an email
+
+            $this->addFlash('success', "Vos modifications ont été prises en compte ! ");
+            return $this->redirectToRoute('event_page', ["id" => $event->getId()]);
+        }
+
+        return $this->render('event/event_update.html.twig', [
+            'EventUpdateForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Effacer un événement
+     * @Route("/event/{id<\d+>}/remove", name="event_remove")
+     * @IsGranted("EVENT_CHANGE", subject="event")
+     */
+    public function eventRemove(Request $request,Event $event,EntityManagerInterface $entityManager)
+    {
+        $removeForm = $this->createForm(EventRemoveFormType::class);
+        $removeForm->handleRequest($request);
+
+        if ($removeForm->isSubmitted() && $removeForm->isValid()) {
+            $entityManager->remove($event);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'L\'évenement a été supprimé');
+            return $this->redirectToRoute('event_list');
+        }
+
+        return $this->render('event/event_remove.html.twig', [
+            'eventRemoveForm' => $removeForm->createView(),
+            'event' => $event
+        ]);
+
     }
 
 
